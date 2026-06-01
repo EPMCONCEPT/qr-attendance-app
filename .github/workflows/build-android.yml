@@ -3,7 +3,7 @@ name: Build Android APK
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:  # Allows manual trigger
+  workflow_dispatch:
 
 jobs:
   build:
@@ -24,19 +24,19 @@ jobs:
       - name: Build Web App
         run: npm run build
 
-      - name: Setup Capacitor
+      - name: Setup Capacitor Android
         run: |
           npm install @capacitor/cli @capacitor/android
-          npx cap init --web-dir dist || true
+          npx cap init --web-dir dist --name "QRAttend Pro" --id "com.qrattend.pro" || true
           npx cap add android || true
           npx cap sync android
 
-      - name: Build Android APK
+      - name: Build Debug APK
         run: |
           cd android
           ./gradlew assembleDebug --no-daemon
 
-      - name: Upload APK
+      - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: qr-attendance-apk
