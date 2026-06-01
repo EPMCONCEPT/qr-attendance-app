@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">QRAttend Pro</string>
+    <string name="title_activity_main">QRAttend Pro</string>
+    <string name="package_name">com.qrattend.pro</string>
+    <string name="custom_url_scheme">com.qrattend.pro</string>
+</resources>

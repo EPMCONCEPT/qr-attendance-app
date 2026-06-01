@@ -1,0 +1,84 @@
+{
+  "entities": {
+    "user": {
+      "title": "User Profile",
+      "description": "Represents a student or teacher profile",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "The Firebase Authentication UID" },
+        "name": { "type": "string", "description": "Full name of the user" },
+        "email": { "type": "string", "description": "Email address of the user" },
+        "role": { "type": "string", "enum": ["teacher", "student"], "description": "Has permissions specific to role" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Timestamp when the user registered" }
+      },
+      "required": ["uid", "name", "email", "role", "createdAt"]
+    },
+    "class": {
+      "title": "Classroom",
+      "description": "Represents a college class created by a teacher",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique auto ID" },
+        "name": { "type": "string", "description": "Name of the class (e.g. Computer Science)" },
+        "code": { "type": "string", "description": "Classroom code (e.g. CS-101)" },
+        "teacherId": { "type": "string", "description": "The UID of the teacher" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "When the class was created" }
+      },
+      "required": ["id", "name", "code", "teacherId", "createdAt"]
+    },
+    "session": {
+      "title": "Attendance Session",
+      "description": "An active QR code generation session started by a teacher",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique session ID" },
+        "classId": { "type": "string", "description": "The reference to the class ID" },
+        "className": { "type": "string", "description": "Name of the class" },
+        "teacherId": { "type": "string", "description": "UID of the creating teacher" },
+        "token": { "type": "string", "description": "A random or time-scoped token stored in the QR code" },
+        "expiredAt": { "type": "string", "format": "date-time", "description": "Expiry time for the QR code" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "When session started" },
+        "isActive": { "type": "boolean", "description": "Whether the session is accepting scans" }
+      },
+      "required": ["id", "classId", "className", "teacherId", "token", "expiredAt", "createdAt", "isActive"]
+    },
+    "attendance": {
+      "title": "Attendance Record",
+      "description": "Recorded presence of a student",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Recorded ID, e.g. sessionId_studentId" },
+        "sessionId": { "type": "string", "description": "The active attendance session ID" },
+        "classId": { "type": "string", "description": "The class identifier" },
+        "className": { "type": "string", "description": "The description name of the class" },
+        "studentId": { "type": "string", "description": "UID of the student" },
+        "studentName": { "type": "string", "description": "Name of the student" },
+        "studentEmail": { "type": "string", "description": "Email of the student" },
+        "timestamp": { "type": "string", "format": "date-time", "description": "When the QR was scanned" },
+        "status": { "type": "string", "enum": ["present", "late"], "description": "Type of marking" },
+        "lat": { "type": "number", "description": "Latitude coordinate of scan" },
+        "lng": { "type": "number", "description": "Longitude coordinate of scan" },
+        "deviceFingerprint": { "type": "string", "description": "Simple browser fingerprint to detect shared QR codes across devices" }
+      },
+      "required": ["id", "sessionId", "classId", "studentId", "studentName", "studentEmail", "timestamp", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "user",
+      "description": "Stores core profile settings for teachers and students"
+    },
+    "/classes/{classId}": {
+      "schema": "class",
+      "description": "College classroom instances created by teachers"
+    },
+    "/sessions/{sessionId}": {
+      "schema": "session",
+      "description": "Active attendance sessions generated with ticking QR tokens"
+    },
+    "/attendance/{attendanceId}": {
+      "schema": "attendance",
+      "description": "Attendance records submitted by students scanning the QR"
+    }
+  }
+}

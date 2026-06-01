@@ -1,0 +1,8 @@
+{
+  "name": "QR Code Attendance App",
+  "description": "A secure college attendance scanning application featuring ticking teacher QR codes, biometrics simulations, and weekly AI participation reports.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
