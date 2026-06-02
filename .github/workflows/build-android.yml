@@ -31,18 +31,23 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Capacitor
+      - name: Initialize Capacitor & Build APK
         run: |
           npm install @capacitor/cli @capacitor/android
+          
+          # Initialize Capacitor if needed
           npx cap init --web-dir dist --name "QRAttend Pro" --id "com.qrattend.pro" || true
+          
+          # Add Android platform
           npx cap add android || true
+          
+          # Sync files
           npx cap sync android
-
-      - name: Build APK
-        run: |
+          
+          # Build APK
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon --stacktrace --info
+          ./gradlew assembleDebug --no-daemon --stacktrace
 
       - name: Upload APK
         if: always()
